@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Club Sign-Ups</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        select {
+            padding: 6px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+    </style>
+
+    <script>
+        let allSignUps = [];
+
+        function loadSignUps() {
+            allSignUps = JSON.parse(localStorage.getItem("clubSignUps")) || [];
+            filterSignUps();
+        }
+
+        function filterSignUps() {
+            const club = document.getElementById("clubFilter").value;
+            const tbody = document.getElementById("tableBody");
+            const total = document.getElementById("total");
+            const message = document.getElementById("message");
+
+            tbody.innerHTML = "";
+            message.textContent = "";
+
+            if (allSignUps.length === 0) {
+                message.textContent = "No sign-ups found in storage.";
+                total.textContent = "0";
+                return;
+            }
+
+            const filtered = club === "ALL"
+                ? allSignUps
+                : allSignUps.filter(s => s.club === club);
+
+            if (filtered.length === 0) {
+                message.textContent = "No sign-ups found for this club.";
+            }
+
+            filtered.forEach(s => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${s.studentId}</td>
+                    <td>${s.fullName}</td>
+                    <td>${s.email}</td>
+                    <td>${s.gradeLevel}</td>
+                    <td>${s.status}</td>
+                    <td>${s.club}</td>
+                    <td>${s.timestamp}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            total.textContent = filtered.length;
+        }
+    </script>
+</head>
+
+<body onload="loadSignUps()">
+
+<h1>Club Sign-Ups</h1>
+
+<div class="top-bar">
+    <div>
+        Filter by Club:
+        <select id="clubFilter" onchange="filterSignUps()">
+            <option value="ALL">ALL</option>
+            <option value="TECH">Tech Innovators</option>
+            <option value="ARTS">Creative Arts Club</option>
+            <option value="SPORT">Sports Enthusiasts</option>
+            <option value="ENV">Green Environment Group</option>
+            <option value="LEAD">Leadership Society</option>
+        </select>
+    </div>
+    <div>
+        <a href="index.html">← Back to Sign-Up Page</a>
+    </div>
+</div>
+
+<p>Total Sign-Ups: <strong id="total">0</strong></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Grade</th>
+            <th>Status</th>
+            <th>Club</th>
+            <th>Date Submitted</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+
+<p class="message" id="message"></p>
+
+</body>
+</html>
