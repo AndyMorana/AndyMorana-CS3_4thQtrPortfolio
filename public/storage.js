@@ -1,7 +1,7 @@
 const stars = document.querySelectorAll(".star");
 const ratingInput = document.getElementById("rating");
 
-/* ---------------- STAR RATING ---------------- */
+/*For the star rating*/
 
 stars.forEach(star => {
 
@@ -21,7 +21,7 @@ stars.forEach(star => {
 });
 
 
-/* ---------------- FORM SUBMIT (ADD / UPDATE) ---------------- */
+/*For the form submission*/
 
 document.getElementById("movieForm").addEventListener("submit", function(e){
 
@@ -157,3 +157,4 @@ function deleteMovie(index){
 /*For the initial load*/
 
 displayMovies();
+
